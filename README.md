@@ -27,15 +27,25 @@ This project automates deployment of a Java app using:
 chmod +x start_server.sh
 ./start_server.sh
 
+---
+
 # Docker
 - docker build -t java-jar-app .
 - docker run -d -p 9000:9000 java-jar-app
+
+---
 
 # 📦 CI/CD
 - Automatically builds, pushes, and deploys to EC2
 - Uses GitHub Secrets for credentials
 
+---
+
 # 🌐 AWS Load Balancer
 - Type: ALB
 - Port: 80 → 9000 (EC2 instance)
 - Health Check: Path / on port 9000
+
+---
+
+👉 See [assumptions.md](./assumptions.md) for decisions, failure handling, and secrets setup.
