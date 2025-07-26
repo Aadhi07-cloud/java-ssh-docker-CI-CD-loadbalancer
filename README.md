@@ -1,8 +1,5 @@
-# java-ssh-docker-CI-CD-loadbalancer
-Automated deployment of a Java app using SSH, Docker, GitHub Actions &amp; AWS Load Balancer
-
 # Java SSH Docker CI/CD Load Balancer
-
+Automated deployment of a Java app using SSH, Docker, GitHub Actions &amp; AWS Load Balancer
 ## 🚀 Overview
 
 This project automates deployment of a Java app using:
