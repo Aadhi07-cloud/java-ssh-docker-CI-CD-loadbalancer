@@ -1,0 +1,41 @@
+ name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Build Docker image
+        run: docker build -t java-jar-app .
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Push image to DockerHub
+        run: |
+          docker tag java-jar-app yourdockerhubuser/java-jar-app:latest
+          docker push yourdockerhubuser/java-jar-app:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull yourdockerhubuser/java-jar-app:latest
+            docker stop java-app || true
+            docker rm java-app || true
+            docker run -d -p 9000:9000 --name java-app yourdockerhubuser/java-jar-app:latest
